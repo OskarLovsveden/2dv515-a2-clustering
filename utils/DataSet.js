@@ -16,6 +16,7 @@ export default class DataSet {
       if (i == 0) continue;
 
       const blog = {};
+      // const blog = new Blog();
 
       for await (const [i, key] of this.rawData[0].entries()) {
         const value = parseInt(row[i]);
@@ -23,8 +24,11 @@ export default class DataSet {
         blog[key] = value;
 
         if (i == 0) {
+          // blog.setName(value); // replaces row 24
           continue;
         }
+
+        // blog.words[key] = value; // replaces row 24
 
         if (this.min[i - 1] == null || value < this.min[i - 1]) {
           this.min[i - 1] = value;
