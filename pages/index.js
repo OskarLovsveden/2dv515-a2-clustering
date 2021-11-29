@@ -1,11 +1,11 @@
-import Head from 'next/head'
-import styles from '../styles/Home.module.css'
+import Head from "next/head";
+import styles from "styles/Home.module.css";
 
 export async function getServerSideProps() {
-  const res = await fetch(`http://localhost:3000/api/hello`)
-  const data = await res.json()
+  const res = await fetch("http://localhost:3000/api/hello");
+  const data = await res.json();
 
-  return { props: { data } }
+  return { props: { data } };
 }
 
 export default function Home({ data }) {
@@ -18,8 +18,10 @@ export default function Home({ data }) {
       </Head>
 
       <main className={styles.main}>
-        <p>{data.name}</p>
+        {data.map((index, item) => (
+          <p key={index}>{item}</p>
+        ))}
       </main>
     </div>
-  )
+  );
 }
