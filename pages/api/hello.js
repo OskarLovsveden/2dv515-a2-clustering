@@ -2,7 +2,7 @@ import fs from "fs";
 import readline from "readline";
 
 import { kMeans } from "utils/clustering";
-import DataSet from "utils/DataSet";
+import DataSet from "models/DataSet";
 
 export default async function handler(req, res) {
   const {
@@ -11,12 +11,13 @@ export default async function handler(req, res) {
   } = req;
 
   if (method === "GET") {
-    const ds = new DataSet(await readFile());
-    await ds.process();
+    const dataSet = new DataSet(await readFile());
+    await dataSet.process();
 
-    // const clusters = kMeans(ds);
+    const clusters = kMeans(dataSet);
 
-    res.status(200).json(ds.max);
+    // res.status(200).json({msg: 'hej'});
+    res.status(200).json(clusters);
   }
 }
 
