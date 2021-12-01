@@ -1,23 +1,23 @@
 export default class Blog {
-    #name = ""
-    words = []
-    
-    setName(value) {
-        this.#name = value;
-    }
+  #name = "";
+  words = [];
 
-    getName() {
-        return this.#name;
-    }
+  setName(value) {
+    this.#name = value;
+  }
 
-    setWord(word, occurence) {
-        this.words.push({
-            word,
-            occurence
-        })
-    }
+  getName() {
+    return this.#name;
+  }
 
-    wordCount(i) {
-        return this.words[i].occurence
-    }
+  setWord(word, occurence) {
+    this.words.push({
+      word,
+      occurence,
+    });
+  }
+
+  wordCount(i) {
+    return this.words[i].occurence;
+  }
 }
