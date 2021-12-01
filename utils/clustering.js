@@ -15,8 +15,6 @@ export const kMeans = (dataSet) => {
     const blogs = dataSet.getBlogs();
     const centroids = []
 
-    const MAX_ITERATIONS = 10;
-
     for (let i = 0; i < k; i++) {
         const c = new Centroid();
         for (let j = 0; j < n; j++) {
@@ -26,44 +24,66 @@ export const kMeans = (dataSet) => {
         centroids.push(c);
     }
 
-        for (let i = 0; i < MAX_ITERATIONS; i++) {
+    do {
+        for (const c of centroids) {
+            c.clearAssignments()
+        }
+
+        for (const b of blogs) {
+            let distance = Number.MAX_VALUE
+            let best = new Centroid();
+
             for (const c of centroids) {
-                c.clearAssignments()
-            }
-
-            for (const b of blogs) {
-                let distance = Number.MAX_VALUE
-                let best = new Centroid();
-
-                for (const c of centroids) {
-                    const cDist = pearson(n, c, b)
-                    
-                    if (cDist < distance) {
-                        best = c
-                        distance = cDist
-                    }
-
-                }
+                const cDist = pearson(n, c, b)
                 
-                best.assign(b)
+                if (cDist < distance) {
+                    best = c
+                    distance = cDist
+                }
+
             }
             
-            for (const c of centroids) {
-                for (let i = 0; i < n; i++) {
-                    let avg = 0;
-                    
-                    for (const b of c.getAssignments()) {
-                        avg += b.wordCount(i)
-                    }
-                    
-                    avg /= c.getAssignments().length
-                    c.setWordCount(i, avg)
+            best.assign(b)
+        }
+        
+        for (const c of centroids) {
+            for (let i = 0; i < n; i++) {
+                let avg = 0;
+                
+                for (const b of c.getAssignments()) {
+                    avg += b.wordCount(i)
                 }
+                
+                avg /= c.getAssignments().length
+                c.setWordCount(i, avg)
             }
         }
+    } while (newClusterAssignments(centroids));
 
     return centroids;
 };
+
+const newClusterAssignments = (centroids) => {
+    for (const c of centroids) {
+        let current = c.getAssignments();
+        let prev = c.getPrevAssignments();
+
+        if (current.length !== prev.length) {
+            return true;
+        }
+
+        current = current.slice().sort()
+        prev = prev.slice().sort()
+
+        for (let i = 0; i < current.length; i++) {
+            if (current[i].getName() !== prev[i].getName()) {
+                return true;
+            }
+        }
+    }
+
+    return false;
+}
 
 export const centroidsToClusters = (centroids) => {
     const result = []
@@ -75,7 +95,7 @@ export const centroidsToClusters = (centroids) => {
         }
 
         for (const a of c.getAssignments()) {
-            cluster.blogs.push(a.name)
+            cluster.blogs.push(a.getName())
         }
 
         result.push(cluster)
