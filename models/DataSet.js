@@ -1,4 +1,4 @@
-import Blog from 'models/Blog'
+import Blog from "models/Blog";
 
 export default class DataSet {
   #rawData = [];
@@ -9,7 +9,7 @@ export default class DataSet {
 
   /**
    * Constructor that takes raw data from a blog dataset matrix.
-   * 
+   *
    * @param {Array} rawData the raw data to turn into a dataset.
    */
   constructor(rawData) {
@@ -26,7 +26,7 @@ export default class DataSet {
 
       for await (const [i, colVal] of this.#rawData[0].entries()) {
         const rowVal = row[i];
-        
+
         if (i == 0) {
           blog.setName(rowVal);
           continue;

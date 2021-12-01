@@ -11,7 +11,6 @@ import Centroid from "models/Centroid";
  * @returns the similarity.
  */
 export const pearson = (n, a, b) => {
-
   //Init variables
   let sumA = 0,
     sumB = 0,
@@ -34,7 +33,7 @@ export const pearson = (n, a, b) => {
   }
 
   //Calculate Pearson
-  const num = pSum - (sumA * sumB / n);
+  const num = pSum - (sumA * sumB) / n;
   const den = Math.sqrt(
     (sumAsq - Math.pow(sumA, 2) / n) * (sumBsq - Math.pow(sumB, 2) / n)
   );
