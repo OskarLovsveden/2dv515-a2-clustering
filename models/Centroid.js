@@ -1,6 +1,7 @@
 export default class Centroid {
     #wordCount = []
     assignments = []
+    prevAssignments = []
     
     setWordCount(i, value) {
         this.#wordCount[i] = value;
@@ -15,10 +16,15 @@ export default class Centroid {
     }
 
     clearAssignments() {
+        this.prevAssignments = this.assignments;
         this.assignments = []
     }
 
     getAssignments() {
         return this.assignments;
+    }
+
+    getPrevAssignments() {
+        return this.prevAssignments;
     }
 }
