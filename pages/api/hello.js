@@ -1,7 +1,7 @@
 import fs from "fs";
 import readline from "readline";
 
-import { kMeans } from "utils/clustering";
+import { kMeans, centroidsToClusters } from "utils/clustering";
 import DataSet from "models/DataSet";
 
 export default async function handler(req, res) {
@@ -14,7 +14,8 @@ export default async function handler(req, res) {
     const dataSet = new DataSet(await readFile());
     await dataSet.process();
 
-    const clusters = kMeans(dataSet);
+    const centroids = kMeans(dataSet);
+    const clusters = centroidsToClusters(centroids);
 
     // res.status(200).json({msg: 'hej'});
     res.status(200).json(clusters);
