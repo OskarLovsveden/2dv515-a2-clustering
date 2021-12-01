@@ -1,9 +1,13 @@
 export default class Blog {
-    name = ""
+    #name = ""
     words = []
     
     setName(value) {
-        this.name = value;
+        this.#name = value;
+    }
+
+    getName() {
+        return this.#name;
     }
 
     setWord(word, occurence) {
