@@ -26,44 +26,48 @@ export const kMeans = (dataSet) => {
         centroids.push(c);
     }
 
-    for (let i = 0; i < MAX_ITERATIONS; i++) {
-        for (const c of centroids) {
-            c.clearAssignments()
-        }
-
-        for (const b of blogs) {
-            let distance = Number.MAX_VALUE
-            let best = new Centroid();
-
+        for (let i = 0; i < MAX_ITERATIONS; i++) {
             for (const c of centroids) {
-                const cDist = pearson(n, c, b)
+                c.clearAssignments()
+            }
+
+            for (const b of blogs) {
+                let distance = Number.MAX_VALUE
+                let best = new Centroid();
+
+                for (const c of centroids) {
+                    const cDist = pearson(n, c, b)
+                    
+                    if (cDist < distance) {
+                        best = c
+                        distance = cDist
+                    }
+
+                }
                 
-                if (cDist < distance) {
-                    best = c
-                    distance = cDist
-                }
-
+                best.assign(b)
             }
-
-            best.assign(b)
-        }
-
-        for (const c of centroids) {
-            for (let i = 0; i < n; i++) {
-                let avg = 0;
-
-                for (const b of c.getAssignments()) {
-                    avg += b.wordCount(i)
+            
+            for (const c of centroids) {
+                for (let i = 0; i < n; i++) {
+                    let avg = 0;
+                    
+                    for (const b of c.getAssignments()) {
+                        avg += b.wordCount(i)
+                    }
+                    
+                    avg /= c.getAssignments().length
+                    c.setWordCount(i, avg)
                 }
-
-                avg /= c.getAssignments().length
-                c.setWordCount(i, avg)
             }
         }
-    }
 
+    return centroids;
+};
+
+export const centroidsToClusters = (centroids) => {
     const result = []
-
+    
     for (const [i, c] of centroids.entries()) {
         const cluster = {
             cluster: (i + 1),
@@ -78,4 +82,4 @@ export const kMeans = (dataSet) => {
     }
 
     return result;
-};
+}
