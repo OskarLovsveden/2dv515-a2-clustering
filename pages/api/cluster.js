@@ -4,7 +4,7 @@ import DataSet from "models/DataSet";
 
 export default async function handler(req, res) {
   const {
-    body: {},
+    query: { algorithm },
     method,
   } = req;
 
@@ -12,9 +12,19 @@ export default async function handler(req, res) {
     const fileAsArray = await fileToArray("data/blogdata.txt");
     const dataSet = new DataSet(fileAsArray);
     await dataSet.process();
+    let clusters;
 
-    const centroids = kMeans(dataSet);
-    const clusters = centroidsToClusters(centroids);
+    switch (algorithm) {
+      case "kMeans":
+        clusters = kMeans(dataSet);
+        break;
+      case "hierarchical":
+        clusters = hierarchical(dataSet);
+        break;
+      default:
+        // erronous status?
+        break;
+    }
 
     res.status(200).json(clusters);
   }
