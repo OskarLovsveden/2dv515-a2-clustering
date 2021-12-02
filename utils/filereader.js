@@ -16,4 +16,4 @@ const fileToArray = async (path) => {
   return rawData;
 };
 
-export default fileToArray;
+export { fileToArray };
