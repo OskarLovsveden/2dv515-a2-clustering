@@ -62,7 +62,7 @@ export const kMeans = (dataSet) => {
     }
   } while (newClusterAssignments(centroids));
 
-  return centroids;
+  return centroidsToClusters(centroids);
 };
 
 const newClusterAssignments = (centroids) => {
