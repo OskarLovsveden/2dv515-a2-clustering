@@ -1,14 +1,21 @@
+import { useRef } from "react";
 import Head from "next/head";
 import styles from "styles/Home.module.css";
 
-export async function getServerSideProps() {
-  const res = await fetch("http://localhost:3000/api/hello");
-  const data = await res.json();
+export default function Home() {
+  const algorithmInputRef = useRef();
 
-  return { props: { data } };
-}
+  const fetchClusters = async () => {
+    const url = new URL("http://localhost:3000/api/cluster");
+    const params = { algorithm: algorithmInputRef.current.value };
+    url.search = new URLSearchParams(params).toString();
+    console.log(url);
 
-export default function Home({ data }) {
+    const res = await fetch(url);
+    const data = await res.json();
+    console.log(data);
+  };
+
   return (
     <div className={styles.container}>
       <Head>
@@ -18,9 +25,17 @@ export default function Home({ data }) {
       </Head>
 
       <main className={styles.main}>
-        {data.map((index, item) => (
-          <p key={index}>{item}</p>
-        ))}
+        <select ref={algorithmInputRef}>
+          <option value="kMeans">k-means</option>
+          <option value="hierarchical">hierarchical</option>
+        </select>
+        <button
+          onClick={async () => {
+            await fetchClusters();
+          }}
+        >
+          FETCH
+        </button>
       </main>
     </div>
   );
