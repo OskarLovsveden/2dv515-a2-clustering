@@ -87,7 +87,7 @@ const newClusterAssignments = (centroids) => {
   return false;
 };
 
-export const centroidsToClusters = (centroids) => {
+const centroidsToClusters = (centroids) => {
   const result = [];
 
   for (const [i, c] of centroids.entries()) {
