@@ -1,14 +1,14 @@
 export default class Centroid {
-  #wordCount = [];
+  wordCount = [];
   assignments = [];
   prevAssignments = [];
 
   setWordCount(i, count) {
-    this.#wordCount[i] = count;
+    this.wordCount[i] = count;
   }
 
-  wordCount(i) {
-    return this.#wordCount[i];
+  getWordCount(i) {
+    return this.wordCount[i];
   }
 
   assign(toBeAssigned) {
