@@ -53,7 +53,7 @@ export const kMeans = (dataSet) => {
         let avg = 0;
 
         for (const b of c.getAssignments()) {
-          avg += b.wordCount(i);
+          avg += b.getWordCount(i);
         }
 
         avg /= c.getAssignments().length;
@@ -92,7 +92,7 @@ const centroidsToClusters = (centroids) => {
 
   for (const [i, c] of centroids.entries()) {
     const cluster = {
-      cluster: i + 1,
+      id: i + 1,
       blogs: [],
     };
 

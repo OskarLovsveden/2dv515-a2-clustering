@@ -1,16 +1,16 @@
 export default class Blog {
-  #name = "";
+  name = "";
   #wordCount = [];
 
   setName(value) {
-    this.#name = value;
+    this.name = value;
   }
 
   getName() {
-    return this.#name;
+    return this.name;
   }
 
-  wordCount(i) {
+  getWordCount(i) {
     return this.#wordCount[i];
   }
 

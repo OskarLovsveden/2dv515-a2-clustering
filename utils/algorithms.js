@@ -23,8 +23,8 @@ export const pearson = (n, a, b) => {
 
   //Iterate over all words
   for (let i = 0; i < n; i++) {
-    const cntA = a.wordCount(i); //word counts for each word in A
-    const cntB = b.wordCount(i); //word counts for each word in B
+    const cntA = a.getWordCount(i); //word counts for each word in A
+    const cntB = b.getWordCount(i); //word counts for each word in B
     sumA += cntA; //sum of word counts for A
     sumB += cntB; //sum of word counts for B
     sumAsq += Math.pow(cntA, 2); //sum of squared word counts for A
