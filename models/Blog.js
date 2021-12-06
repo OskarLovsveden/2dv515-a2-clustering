@@ -1,6 +1,6 @@
 export default class Blog {
   #name = "";
-  words = [];
+  #wordCount = [];
 
   setName(value) {
     this.#name = value;
@@ -10,14 +10,11 @@ export default class Blog {
     return this.#name;
   }
 
-  setWord(word, occurence) {
-    this.words.push({
-      word,
-      occurence,
-    });
+  wordCount(i) {
+    return this.#wordCount[i];
   }
 
-  wordCount(i) {
-    return this.words[i].occurence;
+  setWordCount(i, count) {
+    this.#wordCount.splice(i, 1, count);
   }
 }
