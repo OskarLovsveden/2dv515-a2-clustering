@@ -1,4 +1,5 @@
-import { kMeans, centroidsToClusters } from "utils/clustering";
+import { kMeans } from "utils/kMeans";
+import { hierarchical } from "utils/hierarchical";
 import { fileToArray } from "utils/filereader";
 import DataSet from "models/DataSet";
 
