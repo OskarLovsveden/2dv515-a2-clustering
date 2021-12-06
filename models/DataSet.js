@@ -34,7 +34,7 @@ export default class DataSet {
 
         const rowValParsed = parseInt(rowVal);
 
-        blog.setWord(colVal, rowValParsed);
+        blog.setWordCount(this.wordCount, rowValParsed);
 
         if (this.min[i - 1] == null || rowValParsed < this.min[i - 1]) {
           this.min[i - 1] = rowValParsed;
