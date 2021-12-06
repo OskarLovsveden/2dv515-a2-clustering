@@ -11,39 +11,59 @@ import { pearson } from "utils/algorithms";
 export const hierarchical = (dataSet) => {
   const n = dataSet.getWordCount();
   const blogs = dataSet.getBlogs();
-  const clusters = [];
+  const clusters = new Set();
 
   for (const blog of blogs) {
     const cluster = new Cluster();
-    cluster.blog = blog;
-    clusters.push(cluster);
+    cluster.setBlog(blog);
+    clusters.add(cluster);
   }
 
-  while (clusters.length > 1) {
+  while (clusters.size > 1) {
     iterate(n, clusters);
   }
 
-  return clusters;
+  for (const cluster of clusters) {
+    processNodes(cluster);
+  }
+
+  return [...clusters];
+};
+
+/**
+ * Processes nodes for a cleaner result, starting with a head node.
+ *
+ * @param {Cluster} cluster the head node to start from.
+ */
+const processNodes = (cluster) => {
+  if (cluster.getRight()) {
+    processNodes(cluster.getRight());
+  }
+
+  if (cluster.getLeft()) {
+    processNodes(cluster.getLeft());
+  }
+
+  if (!cluster.getBlog().getName()) {
+    cluster.setBlog(null);
+  }
 };
 
 /**
  * An iteration of hierarchical generation.
  *
  * @param {number} n the number of words in the dataset.
- * @param {Cluster[]} clusters the current set of clusters.
+ * @param {Set<Cluster>} clusters the current set of clusters.
  */
 const iterate = (n, clusters) => {
-  //Find two closest nodes
   let closest = Number.MAX_VALUE;
   let a = new Cluster();
   let b = new Cluster();
 
   for (const cA of clusters) {
     for (const cB of clusters) {
-      console.log(cA, cB);
-      const distance = pearson(n, cA.blog, cB.blog);
-      if (distance < closest && cA != cB) {
-        //New set of closest nodes found
+      const distance = pearson(n, cA.getBlog(), cB.getBlog());
+      if (distance < closest && cA !== cB) {
         closest = distance;
         a = cA;
         b = cB;
@@ -51,15 +71,11 @@ const iterate = (n, clusters) => {
     }
   }
 
-  //Merge the two clusters
   const nC = merge(n, a, b, closest);
-
-  //Add new cluster
   clusters.add(nC);
 
-  //Remove old clusters
-  clusters.splice(clusters.indexOf(a), 1);
-  clusters.splice(clusters.indexOf(b), 1);
+  clusters.delete(a);
+  clusters.delete(b);
 };
 
 /**
@@ -71,33 +87,26 @@ const iterate = (n, clusters) => {
  * @return {Cluster} the merged cluster.
  */
 const merge = (n, a, b, distance) => {
-  //Create new cluster
   const p = new Cluster();
 
-  //Fill data
-  p.left = a;
-  a.parent = p;
-  p.right = b;
-  b.parent = p;
+  p.setLeft(a);
+  p.setRight(b);
+  a.setParent(p);
+  b.setParent(p);
 
-  //Merge blog data by averaging word counts for each word
   const nB = new Blog();
 
   for (let i = 0; i < n; i++) {
-    const cntA = a.blog.word_count(i);
-    const cntB = b.blog.word_count(i);
-    //Average word count
+    const cntA = a.getBlog().getWordCount(i);
+    const cntB = b.getBlog().getWordCount(i);
+
     const cnt = (cntA + cntB) / 2;
-    //Set word count to new blog
-    nB.set_word_count(i, cnt);
+
+    nB.setWordCount(i, cnt);
   }
 
-  //Set blog to new cluster
-  p.blog = nB;
+  p.setBlog(nB);
+  p.setDistance(distance);
 
-  //Set distance
-  p.distance = distance;
-
-  //Return new cluster
   return p;
 };
