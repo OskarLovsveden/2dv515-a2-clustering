@@ -1,10 +1,13 @@
 import { useRef, useState } from "react";
 import Head from "next/head";
 import styles from "styles/Home.module.css";
-import Cluster from "components/Cluster";
+import KMeans from "components/KMeans";
+import Hierarchical from "components/Hierarchical";
 
 export default function Home() {
-  const [clusters, setClusters] = useState([]);
+  const [kMeansData, setKMeansData] = useState(null);
+  const [hierarchicalData, setHierarchicalData] = useState(null);
+  const [algoType, setAlgoType] = useState("");
   const algorithmInputRef = useRef();
 
   const fetchClusters = async () => {
@@ -13,8 +16,15 @@ export default function Home() {
     url.search = new URLSearchParams(params).toString();
 
     const res = await fetch(url);
-    const data = await res.json();
-    setClusters(data);
+    const { type, data } = await res.json();
+
+    setAlgoType(type);
+
+    if (type === "kMeans") {
+      setKMeansData(data);
+    } else {
+      setHierarchicalData(data[0]);
+    }
   };
 
   return (
@@ -41,9 +51,12 @@ export default function Home() {
           </button>
         </section>
         <section>
-          {clusters.map((cluster, index) => (
-            <Cluster key={index} data={cluster} />
-          ))}
+          {algoType === "kMeans" && kMeansData && (
+            <KMeans clusters={kMeansData} />
+          )}
+          {algoType === "hierarchical" && hierarchicalData && (
+            <Hierarchical cluster={hierarchicalData} />
+          )}
         </section>
       </main>
     </div>
