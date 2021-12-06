@@ -3,8 +3,8 @@ export default class Centroid {
   assignments = [];
   prevAssignments = [];
 
-  setWordCount(i, value) {
-    this.#wordCount[i] = value;
+  setWordCount(i, count) {
+    this.#wordCount[i] = count;
   }
 
   wordCount(i) {
