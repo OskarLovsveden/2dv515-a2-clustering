@@ -3,43 +3,35 @@ import { BsFileEarmark } from "react-icons/bs";
 import { BiSubdirectoryRight } from "react-icons/bi";
 
 const Hierarchical = ({ cluster }) => {
-  const { right, left, blog } = cluster;
+  const { right, left } = cluster;
+
   return (
     <Cluster defaultState={true}>
       <ul className="list-none ml-m">
-        {blog && (
-          <li className="unselectable">
-            <BiSubdirectoryRight />
-            <BsFileEarmark />
-            <span className="ml-s">{blog.name}</span>
-          </li>
-        )}
-        {right ? (
-          right.blog ? (
-            <li className="unselectable">
-              <BiSubdirectoryRight />
-              <BsFileEarmark />
-              <span className="ml-s">{right.blog.name}</span>
-            </li>
-          ) : (
-            <li>
-              <Hierarchical cluster={right} />
-            </li>
-          )
-        ) : null}
-        {left ? (
-          left.blog ? (
+        {left &&
+          (left.blog ? (
             <li className="unselectable">
               <BiSubdirectoryRight />
               <BsFileEarmark />
               <span className="ml-s">{left.blog.name}</span>
             </li>
           ) : (
-            <li>
+            <li className="unselectable">
               <Hierarchical cluster={left} />
             </li>
-          )
-        ) : null}
+          ))}
+        {right &&
+          (right.blog ? (
+            <li className="unselectable">
+              <BiSubdirectoryRight />
+              <BsFileEarmark />
+              <span className="ml-s">{right.blog.name}</span>
+            </li>
+          ) : (
+            <li className="unselectable">
+              <Hierarchical cluster={right} />
+            </li>
+          ))}
       </ul>
     </Cluster>
   );
