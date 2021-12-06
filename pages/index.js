@@ -1,19 +1,20 @@
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import Head from "next/head";
 import styles from "styles/Home.module.css";
+import Cluster from "components/Cluster";
 
 export default function Home() {
+  const [clusters, setClusters] = useState([]);
   const algorithmInputRef = useRef();
 
   const fetchClusters = async () => {
     const url = new URL("http://localhost:3000/api/cluster");
     const params = { algorithm: algorithmInputRef.current.value };
     url.search = new URLSearchParams(params).toString();
-    console.log(url);
 
     const res = await fetch(url);
     const data = await res.json();
-    console.log(data);
+    setClusters(data);
   };
 
   return (
@@ -25,17 +26,25 @@ export default function Home() {
       </Head>
 
       <main className={styles.main}>
-        <select ref={algorithmInputRef}>
-          <option value="kMeans">k-means</option>
-          <option value="hierarchical">hierarchical</option>
-        </select>
-        <button
-          onClick={async () => {
-            await fetchClusters();
-          }}
-        >
-          FETCH
-        </button>
+        <section className="mb-m">
+          <select ref={algorithmInputRef} className="p05">
+            <option value="kMeans">k-means</option>
+            <option value="hierarchical">hierarchical</option>
+          </select>
+          <button
+            className="ml-s p05"
+            onClick={async () => {
+              await fetchClusters();
+            }}
+          >
+            FETCH
+          </button>
+        </section>
+        <section>
+          {clusters.map((cluster, index) => (
+            <Cluster key={index} data={cluster} />
+          ))}
+        </section>
       </main>
     </div>
   );
