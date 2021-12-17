@@ -5,12 +5,16 @@ import KMeans from "components/KMeans";
 import Hierarchical from "components/Hierarchical";
 
 export default function Home() {
-  const [kMeansData, setKMeansData] = useState(null);
-  const [hierarchicalData, setHierarchicalData] = useState(null);
-  const [algoType, setAlgoType] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [data, setData] = useState(null);
+  const [type, setType] = useState(null);
   const algorithmInputRef = useRef();
 
   const fetchClusters = async () => {
+    setLoading(true);
+    setType(null);
+    setData(null);
+
     const url = new URL("http://localhost:3000/api/cluster");
     const params = { algorithm: algorithmInputRef.current.value };
     url.search = new URLSearchParams(params).toString();
@@ -18,13 +22,9 @@ export default function Home() {
     const res = await fetch(url);
     const { type, data } = await res.json();
 
-    setAlgoType(type);
-
-    if (type === "kMeans") {
-      setKMeansData(data);
-    } else {
-      setHierarchicalData(data[0]);
-    }
+    setType(type);
+    setData(data);
+    setLoading(false);
   };
 
   return (
@@ -51,11 +51,15 @@ export default function Home() {
           </button>
         </section>
         <section>
-          {algoType === "kMeans" && kMeansData && (
-            <KMeans clusters={kMeansData} />
-          )}
-          {algoType === "hierarchical" && hierarchicalData && (
-            <Hierarchical cluster={hierarchicalData} />
+          {loading ? (
+            <h1>Loading...</h1>
+          ) : (
+            data &&
+            (type === "kMeans" ? (
+              <KMeans clusters={data} />
+            ) : (
+              <Hierarchical cluster={data[0]} />
+            ))
           )}
         </section>
       </main>
