@@ -20,7 +20,7 @@ export const kMeans = (dataSet) => {
     for (let j = 0; j < n; j++) {
       c.setWordCount(
         j,
-        Math.floor(Math.random() * (max[i] - min[i] + 1) + min[i])
+        Math.floor(Math.random() * (max[j] - min[j] + 1) + min[j])
       );
     }
 
